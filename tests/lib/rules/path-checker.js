@@ -10,7 +10,7 @@
 
 const rule = require("../../../lib/rules/path-checker"),
   RuleTester = require("eslint").RuleTester;
-
+const {RELATIVE_PATH_ERROR} = require("../../../lib/const/const");
 
 //------------------------------------------------------------------------------
 // Tests
@@ -30,15 +30,17 @@ ruleTester.run("path-checker", rule, {
 
   invalid: [
     {
-      filename: 'C:\\Desktop\\javascript\\production-project\\src\\entities\\Article',
+      filename: 'C:\\Desktop\\javascript\\production-project\\src\\entities\\Article\\ui\\Component.tsx',
       code: "import { addCommentFormActions, addCommentFormReducer } from 'entities/Article/model/slices/addCommentFormSlice'",
-      errors: [{ message: "Within one slice, paths must be relative" }],
+      errors: [{ messageId: RELATIVE_PATH_ERROR }],
+      output: "import { addCommentFormActions, addCommentFormReducer } from '../model/slices/addCommentFormSlice'",
     },
     {
-      filename: 'C:\\Desktop\\javascript\\production-project\\src\\entities\\Article',
+      filename: 'C:\\Desktop\\javascript\\production-project\\src\\entities\\Article\\ui\\Component.tsx',
       code: "import { addCommentFormActions, addCommentFormReducer } from '@/entities/Article/model/slices/addCommentFormSlice'",
-      errors: [{ message: "Within one slice, paths must be relative" }],
-      options: [{alias: '@'}]
+      errors: [{ messageId: RELATIVE_PATH_ERROR }],
+      options: [{alias: '@'}],
+      output: "import { addCommentFormActions, addCommentFormReducer } from '../model/slices/addCommentFormSlice'"
     },
   ],
 });
